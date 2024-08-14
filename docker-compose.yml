@@ -16,8 +16,8 @@ services:
       - REVERSE_PROXY=true
     volumes:
       - .data/CTFd/logs:/var/log/CTFd
-      - .data/CTFd/uploads:/var/uploads
       - .:/opt/CTFd:ro
+      - /mnt/efs:/var/uploads
     depends_on:
       - db
     networks:
