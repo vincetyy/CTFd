@@ -64,3 +64,6 @@ networks:
     default:
     internal:
         internal: true
+
+volumes:
+  db_aria_logs:
