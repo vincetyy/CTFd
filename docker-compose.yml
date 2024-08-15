@@ -47,6 +47,7 @@ services:
       - MARIADB_AUTO_UPGRADE=1
     volumes:
       - /mnt/efs/mysql_data:/var/lib/mysql  # Store MySQL data in EFS
+      - db_aria_logs:/var/lib/mysql/aria_log  # Local volume for Aria logs
     networks:
         internal:
     command: [mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci, --wait_timeout=28800, --log-warnings=0]
