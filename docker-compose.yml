@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   ctfd:
     build: .
@@ -15,9 +17,9 @@ services:
       - ERROR_LOG=-
       - REVERSE_PROXY=true
     volumes:
-      - .data/CTFd/logs:/var/log/CTFd
-      - .:/opt/CTFd:ro
-      - /mnt/efs:/var/uploads
+      - /mnt/efs/ctfd_logs:/var/log/CTFd  # Store logs in EFS
+      - /mnt/efs/ctfd_uploads:/var/uploads  # Store uploads in EFS
+      - .:/opt/CTFd:ro  # Mount the application code as read-only
     depends_on:
       - db
     networks:
@@ -44,17 +46,16 @@ services:
       - MARIADB_DATABASE=ctfd
       - MARIADB_AUTO_UPGRADE=1
     volumes:
-      - .data/mysql:/var/lib/mysql
+      - /mnt/efs/mysql_data:/var/lib/mysql  # Store MySQL data in EFS
     networks:
         internal:
-    # This command is required to set important mariadb defaults
     command: [mysqld, --character-set-server=utf8mb4, --collation-server=utf8mb4_unicode_ci, --wait_timeout=28800, --log-warnings=0]
 
   cache:
     image: redis:4
     restart: always
     volumes:
-    - .data/redis:/data
+      - /mnt/efs/redis_data:/data  # Store Redis data in EFS
     networks:
         internal:
 
